@@ -154,7 +154,15 @@ class _HomePageState extends State<HomePage> {
                 child: const Text("Calcular")
               ),
               const SizedBox(height: 64,),
-              Stack(
+              Text(_resultado,
+                style: TextStyle(
+                  fontSize: 35,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w400
+                ),
+
+              )
+              /*Stack(
                 children: <Widget>[
                   // Stroked text as border.
                   Text(
@@ -176,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
-              )
+              )*/
             ],
           ),
         ),
