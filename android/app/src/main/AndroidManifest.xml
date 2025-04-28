@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="practica1_coin_convertor"
+        android:label="Conversor de divisas"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

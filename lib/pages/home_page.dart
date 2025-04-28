@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   final _value = TextEditingController();
   double _total = 0;
 
-  final List<String> _opciones = ['COP', 'USD', 'EUR'];
+  final List<String> _opciones = ['COP', 'USD', 'EUR', 'MXN', 'GBP', 'JPY'];
   String _opcionSeleccionada1 = 'COP';
   String _opcionSeleccionada2 = 'COP';
 
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
             const Text("Conversor de divisas"),
           ],
         ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Color(0xFF62B6CB),
         toolbarHeight: 70,
       ),
       body: Padding(
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 1),
                     decoration: BoxDecoration(
-                      color: Color(0xF1EDEDFF),
+                      color: Color(0x80CAE9FF),
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -93,13 +93,13 @@ class _HomePageState extends State<HomePage> {
                 keyboardType: TextInputType.number,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value){
-                  /*if (value!.isEmpty) {
-                    return "Dabe digitar un correo electrónico";
+                  if (value!.isEmpty) {
+                    return "Dabe digitar un valor.";
                   } else {
-                    if (!value!.isValidEmail()) {
-                      return "El correo no es válido";
+                    if (!value.isValidNumber()) {
+                      return "El valor no es válido";
                     }
-                  }*/
+                  }
                   return null;
                 },
               ),
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 1),
                     decoration: BoxDecoration(
-                      color: Color(0xF1EDEDFF),
+                      color: Color(0x80CAE9FF),
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -143,6 +143,10 @@ class _HomePageState extends State<HomePage> {
                 height: 32,
               ),
               OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(200, 50),
+                  backgroundColor: Color(0xBFBEE9E8)
+                ),
                 onPressed: (){
                   setState(() {
                     (_value.text == '')
@@ -151,7 +155,13 @@ class _HomePageState extends State<HomePage> {
                   });
 
                 },
-                child: const Text("Calcular")
+                child: const Text(
+                  "Calcular",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xFF1B4965)
+                  ),
+                )
               ),
               const SizedBox(height: 64,),
               Text(_resultado,
@@ -198,55 +208,173 @@ class _HomePageState extends State<HomePage> {
           return "Ingrese el valor en COP";
         case 'USD':
           return "Ingrese el valor en USD";
+        case 'MXN':
+          return "Ingrese el valor en MXN";
+        case 'GBP':
+          return "Ingrese el valor en GBP";
+        case 'JPY':
+          return "Ingrese el valor en JPY";
         default:
           return 'Ingrese el valor en EUR';
       }
   }
 
   String _getTotal(opcion1,opcion2){
+    try{
+      _total = double.parse(_value.text);
+    }catch(e){
+      return "El número es inválido";
+    }
       switch(opcion2){
         case 'COP':
-          if(opcion1 == 'COP'){
-            return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
-          }
-          else if(opcion1 == 'USD'){
-            _total = int.parse(_value.text)*4300;
-            _total = double.parse(_total.toStringAsFixed(3));
-            break;
-          }
-          else{
-            _total = double.parse(_value.text)*4900;
-            _total = double.parse(_total.toStringAsFixed(3));
-            break;
+          switch(opcion1){
+            case 'COP':
+              return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
+            case 'USD':
+              _total = double.parse(_value.text)*(4300);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'EUR':
+              _total = double.parse(_value.text)*(4900);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'MXN':
+              _total = double.parse(_value.text)*(215);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'GBP':
+              _total = double.parse(_value.text)*(5600);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'JPY':
+              _total = double.parse(_value.text)*(30);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
           }
         case 'USD':
-          if(opcion1 == 'USD'){
-            return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
-          }
-          else if(opcion1 == 'COP'){
-            _total = double.parse(_value.text)*(1/4300);
-            _total = double.parse(_total.toStringAsFixed(3));
-
-            break;
-          }
-          else{
-            _total = double.parse(_value.text)*1.15;
-            _total = double.parse(_total.toStringAsFixed(3));
-            break;
+          switch(opcion1){
+            case 'COP':
+              _total = double.parse(_value.text)*(1/4300);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'USD':
+              return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
+            case 'EUR':
+              _total = double.parse(_value.text)*(1.15);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'MXN':
+              _total = double.parse(_value.text)*(1/20);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'GBP':
+              _total = double.parse(_value.text)*(1.30);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'JPY':
+              _total = double.parse(_value.text)*(1/145);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
           }
         case 'EUR':
-          if(opcion1 == 'EUR'){
-            return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
+          switch(opcion1){
+            case 'COP':
+              _total = double.parse(_value.text)*(1/4900);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'USD':
+              _total = double.parse(_value.text)*(1/1.15);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'EUR':
+              return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
+            case 'MXN':
+              _total = double.parse(_value.text)*(1/22.5);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'GBP':
+              _total = double.parse(_value.text)*(1.18);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'JPY':
+              _total = double.parse(_value.text)*(1/162);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
           }
-          else if(opcion1 == 'USD'){
-            _total = double.parse(_value.text)*(1/1.15);
-            _total = double.parse(_total.toStringAsFixed(3));
+        case 'MXN':
+          switch(opcion1){
+            case 'COP':
+              _total = double.parse(_value.text)*(1/215);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'USD':
+              _total = double.parse(_value.text)*20;
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'EUR':
+              _total = double.parse(_value.text)*22.5;
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'MXN':
+              return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
+            case 'GBP':
+              _total = double.parse(_value.text)*26.2;
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'JPY':
+              _total = double.parse(_value.text)*(1/7.2);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+          }
+        case 'GBP':
+          switch(opcion1){
+            case 'COP':
+              _total = double.parse(_value.text)*(1/5600);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'USD':
+              _total = double.parse(_value.text)*(1/1.30);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'EUR':
+              _total = double.parse(_value.text)*(1/1.18);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'MXN':
+              _total = double.parse(_value.text)*(26.2);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'GBP':
+              return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
+            case 'JPY':
+            _total = double.parse(_value.text)*(1/190);
+            _total = double.parse(_total.toStringAsFixed(2));
             break;
           }
-          else{
-            _total = double.parse(_value.text)*(1/4900);
-            _total = double.parse(_total.toStringAsFixed(3));
-            break;
+        case 'JPY':
+          switch(opcion1){
+            case 'COP':
+              _total = double.parse(_value.text)*(1/30);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'USD':
+              _total = double.parse(_value.text)*(145);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'EUR':
+              _total = double.parse(_value.text)*(162);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'MXN':
+              _total = double.parse(_value.text)*(7.2);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'GBP':
+              _total = double.parse(_value.text)*(190);
+              _total = double.parse(_total.toStringAsFixed(2));
+              break;
+            case 'JPY':
+              return 'El resultado es el mismo número. Por favor seleccione una conversión válida.';
           }
         default:
           return 'algo hiciste mal';
@@ -254,4 +382,11 @@ class _HomePageState extends State<HomePage> {
       return '${_value.text} $_opcionSeleccionada1 es igual a $_total $_opcionSeleccionada2';
   }
 
+}
+
+extension on String {
+  bool isValidNumber(){
+    return RegExp(r'^[0-9]').hasMatch(this);
+
+  }
 }
